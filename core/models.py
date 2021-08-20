@@ -7,7 +7,8 @@ class Evento(models.Model):
     descricao = models.TextField(blank=True, null=True)
     data_evento = models.DateTimeField(verbose_name='Data do Evento')
     data_criacao = models.DateTimeField(auto_now=True, verbose_name='Data de Criação')
-    usuario = models.ForeignKey(User, on_delete=models.CASCADE) #para deletar todos os campos relacionados ao usuario
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    #para deletar todos os campos relacionados ao usuario
 
     class Meta:
         db_table = 'evento'

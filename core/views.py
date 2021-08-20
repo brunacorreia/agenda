@@ -1,20 +1,35 @@
-from django.shortcuts import render #, redirect -> opção de redirecionamento
+from django.shortcuts import render, redirect# opção de redirecionamento
 from core.models import Evento
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
 # Create your views here.
-
-# opção de redirecionamento
-#def index(request):
-#    return redirect('/agenda/')
 
 def tituloEvento(request, titulo_evento):
     return Evento.objects.get(titulo = titulo_evento)
 
-def lista_eventos(request):
-    # Para mostrar os agendamentos de acordo com a autenticação do usuario:
-#    usuario = request.user
-#    evento = Evento.objects.filter(usuario=usuario)
+def login_user(request):
+    return render(request, 'login.html')
 
-# Força o programa a exibir os agendamentos gerais mesmo sem login
-    evento = Evento.objects.all()
+def logout_user(request):
+    logout(request)
+    return redirect('/')
+
+def submit_login(request):
+    if request.POST:
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        usuario = authenticate(username=username, password=password)
+        if usuario is not None:
+            login(request, usuario)
+            return redirect('/')
+        else:
+            messages.error(request, "Usuário ou senha inválidos, tente novamente.")
+    return redirect('/')
+
+@login_required(login_url='/login/')
+def lista_eventos(request):
+    usuario = request.user
+    evento = Evento.objects.filter(usuario=usuario)
     dados = {'eventos':evento}
     return render(request, 'agenda.html', dados)
