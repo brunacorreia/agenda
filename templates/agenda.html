@@ -8,9 +8,13 @@
     <ul style="font-size: 17px">
         {% for evento in eventos %}
         <li><b>
-            {{ evento.titulo }}</b> - {{ evento.get_data_evento}}
-            (<a href="evento/?id={{ evento.id }}">Editar</a>
-            / <a href="evento/delete/{{ evento.id }}/">Excluir</a>)
+            <div style={% if evento.get_evento_atrasado %}
+                            "color:red">
+                        {% endif %}>
+                {{ evento.titulo }}</b> - {{ evento.get_data_evento}}
+                (<a href="evento/?id={{ evento.id }}">Editar</a>
+                / <a href="evento/delete/{{ evento.id }}/">Excluir</a>)
+            </div>
         </li>
         {% endfor %}
     </ul>
